@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate --schema src/prisma/schema.prisma && tsc",
+  "buildCommand": "node node_modules/prisma/bin/prisma.js generate --schema src/prisma/schema.prisma && tsc",
   "builds": [
     {
       "src": "dist/index.js",
