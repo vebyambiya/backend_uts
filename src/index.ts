@@ -8,10 +8,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  'https://frontend-uts-two.vercel.app',
+  'http://localhost:5000',
+  'http://localhost:5173',
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: (origin, callback) => {
+    // Izinkan request tanpa origin (Postman, mobile, dll)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || process.env.FRONTEND_URL === origin) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
